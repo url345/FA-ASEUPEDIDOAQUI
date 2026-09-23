@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ponto do Lanche</title>
+<title>Ponto 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
@@ -167,6 +167,7 @@
   .cart-note { font-size: 0.78rem; color: var(--ink-soft); margin-top: 10px; }
   .item-modal-group { margin-bottom: 16px; }
   .item-modal-group.hidden { display: none; }
+  #checkout-form.hidden, #order-confirmed.hidden { display: none; }
   .item-modal-group h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); margin: 0 0 8px; }
   .check-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 0.94rem; }
   .check-row input { width: 18px; height: 18px; flex-shrink: 0; }
@@ -189,7 +190,7 @@
 
 <header class="hero" id="top">
   <div class="wrap">
-    <h1>Fome? A gente resolve.</h1>
+    <h1>Bem-vindo ao Ponto 10</h1>
     <p class="tag">Lanches feitos na hora, ingredientes fresquinhos e aquele capricho de quem gosta de cozinhar.</p>
     <div class="hero-actions">
       <a class="btn" href="#cardapio">Ver cardápio</a>
@@ -214,14 +215,14 @@
 
     <div class="menu-cat" data-cat="promo">
       <h3>Promoção do mês</h3>
-      <div class="menu-item" data-name="Combo X-Salada + Refri" data-price="20">
+      <div class="menu-item" data-name="Combo 2x X-Salada + Coca 2L" data-price="49.9">
         <div class="item-text">
-          <span class="item-name">Combo X-Salada + Refri</span>
-          <span class="item-desc">X-Salada acompanhado de refrigerante lata</span>
-          <div class="item-footer"><span class="item-price">R$ 20,00</span><button class="add-btn" aria-label="Pedir Combo X-Salada + Refri">Pedir aqui</button></div>
+          <span class="item-name">Combo 2x X-Salada + Coca 2L</span>
+          <span class="item-desc">2 X-Salada acompanhados de Coca-Cola 2 litros</span>
+          <div class="item-footer"><span class="item-price">R$ 49,90</span><button class="add-btn" aria-label="Pedir Combo 2x X-Salada + Coca 2L">Pedir aqui</button></div>
         </div>
         <div class="item-media">
-          <div class="item-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 13h16v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2zm0-2a1 1 0 0 1 1-1c.34-2.6 2.57-4.5 5.2-4.5h3.6c2.63 0 4.86 1.9 5.2 4.5a1 1 0 0 1 1 1H4zM5 19h14v1H5v-1z"/></svg></div>
+          <div class="item-img"><img src="file_000000006c64820e9f143525aa2551f3.png" alt="Combo 2x X-Salada + Coca 2L"></div>
         </div>
       </div>
     </div>
@@ -265,7 +266,7 @@
           <div class="item-footer"><span class="item-price">R$ 21,50</span><button class="add-btn" aria-label="Pedir X Calabresa">Pedir aqui</button></div>
         </div>
         <div class="item-media">
-          <div class="item-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 13h16v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2zm0-2a1 1 0 0 1 1-1c.34-2.6 2.57-4.5 5.2-4.5h3.6c2.63 0 4.86 1.9 5.2 4.5a1 1 0 0 1 1 1H4zM5 19h14v1H5v-1z"/></svg></div>
+          <div class="item-img"><img src="file_00000000893881f7a8abf1584f68f2fe.png" alt="X Calabresa"></div>
         </div>
       </div>
       <div class="menu-item" data-customizable="lanche" data-name="X Frango" data-price="21.5">
@@ -422,20 +423,15 @@
     <div class="info-grid">
       <div class="info-item">
         <h4>Endereço</h4>
-        <p>Rua Exemplo, 123 — Bairro, Cidade/UF</p>
+        <p>Rua Duzentos e Treze, Morrinhos/GO</p>
       </div>
       <div class="info-item">
         <h4>Horário</h4>
         <p>Das 6h às 2h</p>
       </div>
       <div class="info-item">
-        <h4>Telefone</h4>
-        <p>(00) 00000-0000</p>
-        <a class="whatsapp-link" href="#">Chamar no WhatsApp</a>
-      </div>
-      <div class="info-item">
         <h4>Redes</h4>
-        <p>@pontodolanche</p>
+        <p>@ponto10</p>
       </div>
     </div>
   </div>
@@ -458,18 +454,27 @@
     </div>
     <div id="cart-items"></div>
     <div class="cart-total-row"><span>Total</span><span id="cart-modal-total">R$ 0,00</span></div>
-    <label class="cart-field">Nome
-      <input id="cust-name" type="text" placeholder="Seu nome" autocomplete="name">
-    </label>
-    <label class="cart-field">Telefone
-      <input id="cust-phone" type="tel" placeholder="(00) 00000-0000" autocomplete="tel">
-    </label>
-    <label class="cart-field">Endereço para entrega
-      <textarea id="cust-address" rows="2" placeholder="Rua, número, bairro"></textarea>
-    </label>
-    <p class="cart-error" id="cart-error">Preencha os campos em vermelho para continuar.</p>
-    <button class="btn" id="checkout-btn">Finalizar pedido</button>
-    <p class="cart-note">O pedido é montado aqui no site; para chegar até a lanchonete, o botão acima abre o WhatsApp já com o pedido preenchido.</p>
+    <div id="checkout-form">
+      <label class="cart-field">Nome
+        <input id="cust-name" type="text" placeholder="Seu nome" autocomplete="name">
+      </label>
+      <label class="cart-field">WhatsApp
+        <input id="cust-phone" type="tel" placeholder="(00) 00000-0000" autocomplete="tel">
+      </label>
+      <label class="cart-field">Rua
+        <input id="cust-street" type="text" placeholder="Nome da rua">
+      </label>
+      <label class="cart-field">Número
+        <input id="cust-number" type="text" placeholder="Número ou 'Residencial'">
+      </label>
+      <label class="cart-field">Bairro
+        <input id="cust-neighborhood" type="text" placeholder="Bairro">
+      </label>
+      <p class="cart-error" id="cart-error">Preencha os campos em vermelho para continuar.</p>
+      <button class="btn" id="checkout-btn">Finalizar pedido</button>
+      <p class="cart-note">O pedido é montado e enviado aqui pelo próprio site.</p>
+    </div>
+    <p class="cart-note hidden" id="order-confirmed"></p>
   </div>
 </div>
 
@@ -503,7 +508,6 @@
 <script>
 (function () {
   var STORAGE_KEY = 'lanchonete-cart-v1';
-  var WHATSAPP_NUMBER = '5500000000000'; // TODO: trocar pelo número real (com DDI+DDD, só números)
   var cart = {};
 
   function loadCart() {
@@ -573,7 +577,12 @@
     renderBar();
     renderModal();
   }
-  function openModal() { renderModal(); document.getElementById('cart-overlay').classList.remove('hidden'); }
+  function openModal() {
+    renderModal();
+    document.getElementById('checkout-form').classList.remove('hidden');
+    document.getElementById('order-confirmed').classList.add('hidden');
+    document.getElementById('cart-overlay').classList.remove('hidden');
+  }
   function closeModal() { document.getElementById('cart-overlay').classList.add('hidden'); }
 
   document.querySelectorAll('.cat-tab').forEach(function (tab) {
@@ -686,7 +695,7 @@
     document.getElementById('cardapio').scrollIntoView({ behavior: 'smooth' });
   });
   document.getElementById('cart-close').addEventListener('click', closeModal);
-  ['cust-name', 'cust-phone', 'cust-address'].forEach(function (id) {
+  ['cust-name', 'cust-phone', 'cust-street', 'cust-number', 'cust-neighborhood'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', function () {
       this.classList.remove('field-error');
     });
@@ -705,17 +714,23 @@
     if (cartCount() === 0) return;
     var nameEl = document.getElementById('cust-name');
     var phoneEl = document.getElementById('cust-phone');
-    var addressEl = document.getElementById('cust-address');
+    var streetEl = document.getElementById('cust-street');
+    var numberEl = document.getElementById('cust-number');
+    var neighborhoodEl = document.getElementById('cust-neighborhood');
     var errorEl = document.getElementById('cart-error');
     var name = nameEl.value.trim();
     var phone = phoneEl.value.trim();
-    var address = addressEl.value.trim();
+    var street = streetEl.value.trim();
+    var number = numberEl.value.trim();
+    var neighborhood = neighborhoodEl.value.trim();
 
-    [nameEl, phoneEl, addressEl].forEach(function (el) { el.classList.remove('field-error'); });
+    [nameEl, phoneEl, streetEl, numberEl, neighborhoodEl].forEach(function (el) { el.classList.remove('field-error'); });
     var missing = false;
     if (!name) { nameEl.classList.add('field-error'); missing = true; }
     if (!phone) { phoneEl.classList.add('field-error'); missing = true; }
-    if (!address) { addressEl.classList.add('field-error'); missing = true; }
+    if (!street) { streetEl.classList.add('field-error'); missing = true; }
+    if (!number) { numberEl.classList.add('field-error'); missing = true; }
+    if (!neighborhood) { neighborhoodEl.classList.add('field-error'); missing = true; }
 
     if (missing) {
       errorEl.classList.add('show');
@@ -723,17 +738,20 @@
     }
     errorEl.classList.remove('show');
 
-    var lines = ['Pedido - Ponto do Lanche:'];
+    var lines = [];
     Object.keys(cart).forEach(function (n) {
       var it = cart[n];
-      lines.push(it.qty + 'x ' + n + ' — ' + fmt(it.price * it.qty));
+      lines.push(it.qty + 'x ' + n);
     });
-    lines.push('Total: ' + fmt(cartTotal()));
-    lines.push('Nome: ' + name);
-    lines.push('Telefone: ' + phone);
-    lines.push('Endereço: ' + address);
-    var text = encodeURIComponent(lines.join('\n'));
-    window.location.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + text;
+
+    cart = {};
+    saveCart();
+    renderBar();
+
+    document.getElementById('checkout-form').classList.add('hidden');
+    var confirmEl = document.getElementById('order-confirmed');
+    confirmEl.classList.remove('hidden');
+    confirmEl.innerHTML = 'Pedido recebido, ' + escapeHtml(name) + '! ' + lines.length + ' item(ns) confirmados.';
   });
 
   loadCart();
