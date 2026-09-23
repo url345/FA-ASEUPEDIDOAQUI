@@ -783,6 +783,11 @@
         if (result.data.qr_code_image) {
           document.getElementById('pix-qr').src = result.data.qr_code_image;
         }
+        if (!result.data.pix_copy_paste) {
+          document.getElementById('pix-status').innerHTML =
+            '<strong>[DEBUG temporário]</strong> Resposta da NovaPay:<br><pre style="white-space:pre-wrap;font-size:0.7rem;text-align:left;">' +
+            escapeHtml(JSON.stringify(result.data.raw, null, 2)) + '</pre>';
+        }
       })
       .catch(function () {
         checkoutBtn.disabled = false;
