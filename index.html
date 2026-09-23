@@ -167,7 +167,7 @@
   .cart-note { font-size: 0.78rem; color: var(--ink-soft); margin-top: 10px; }
   .item-modal-group { margin-bottom: 16px; }
   .item-modal-group.hidden { display: none; }
-  #checkout-form.hidden, #order-confirmed.hidden { display: none; }
+  #checkout-form.hidden, #order-confirmed.hidden, #pix-box.hidden { display: none; }
   .item-modal-group h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); margin: 0 0 8px; }
   .check-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 0.94rem; }
   .check-row input { width: 18px; height: 18px; flex-shrink: 0; }
@@ -461,8 +461,15 @@
         <input id="cust-neighborhood" type="text" placeholder="Bairro">
       </label>
       <p class="cart-error" id="cart-error">Preencha os campos em vermelho para continuar.</p>
-      <button class="btn" id="checkout-btn">Finalizar pedido</button>
-      <p class="cart-note">O pedido é montado e enviado aqui pelo próprio site.</p>
+      <button class="btn" id="checkout-btn">Gerar Pix para pagamento</button>
+      <p class="cart-note">O pedido é montado aqui e o Pix é gerado na hora.</p>
+    </div>
+    <div id="pix-box" class="hidden">
+      <p style="font-weight:700; margin-bottom: 10px;">Escaneie ou copie o código Pix:</p>
+      <img id="pix-qr" alt="QR Code Pix" style="width:100%; max-width:220px; display:block; margin:0 auto 12px;">
+      <textarea id="pix-code" rows="3" readonly style="width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; font-size:0.8rem;"></textarea>
+      <button class="btn" id="pix-copy-btn" style="width:100%; margin-top:10px;">Copiar código Pix</button>
+      <p class="cart-note" id="pix-status">Aguardando confirmação do pagamento...</p>
     </div>
     <p class="cart-note hidden" id="order-confirmed"></p>
   </div>
@@ -571,6 +578,7 @@
     renderModal();
     document.getElementById('checkout-form').classList.remove('hidden');
     document.getElementById('order-confirmed').classList.add('hidden');
+    document.getElementById('pix-box').classList.add('hidden');
     document.getElementById('cart-overlay').classList.remove('hidden');
   }
   function closeModal() { document.getElementById('cart-overlay').classList.add('hidden'); }
@@ -728,20 +736,77 @@
     }
     errorEl.classList.remove('show');
 
-    var lines = [];
+    var itemLines = [];
     Object.keys(cart).forEach(function (n) {
       var it = cart[n];
-      lines.push(it.qty + 'x ' + n);
+      itemLines.push(it.qty + 'x ' + n);
     });
+    var total = cartTotal();
+    var description = 'Pedido Ponto 10: ' + itemLines.join(', ');
 
-    cart = {};
-    saveCart();
-    renderBar();
+    var checkoutBtn = document.getElementById('checkout-btn');
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Gerando Pix...';
 
-    document.getElementById('checkout-form').classList.add('hidden');
-    var confirmEl = document.getElementById('order-confirmed');
-    confirmEl.classList.remove('hidden');
-    confirmEl.innerHTML = 'Pedido recebido, ' + escapeHtml(name) + '! ' + lines.length + ' item(ns) confirmados.';
+    fetch('/api/charge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: total,
+        description: description,
+        customer: {
+          name: name,
+          phone: phone,
+          address: street + ', ' + number + ' - ' + neighborhood
+        }
+      })
+    })
+      .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+      .then(function (result) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = 'Gerar Pix para pagamento';
+
+        if (!result.ok) {
+          errorEl.textContent = 'Não foi possível gerar o Pix. Tente novamente.';
+          errorEl.classList.add('show');
+          return;
+        }
+
+        cart = {};
+        saveCart();
+        renderBar();
+
+        document.getElementById('checkout-form').classList.add('hidden');
+        var pixBox = document.getElementById('pix-box');
+        pixBox.classList.remove('hidden');
+        document.getElementById('pix-code').value = result.data.pix_copy_paste || '';
+        if (result.data.qr_code_image) {
+          document.getElementById('pix-qr').src = result.data.qr_code_image;
+        }
+        if (!result.data.pix_copy_paste) {
+          document.getElementById('pix-status').innerHTML =
+            '<strong>[DEBUG temporário]</strong> Resposta da NovaPay:<br><pre style="white-space:pre-wrap;font-size:0.7rem;text-align:left;">' +
+            escapeHtml(JSON.stringify(result.data.raw, null, 2)) + '</pre>';
+        }
+      })
+      .catch(function () {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = 'Gerar Pix para pagamento';
+        errorEl.textContent = 'Erro de conexão. Tente novamente.';
+        errorEl.classList.add('show');
+      });
+  });
+
+  document.getElementById('pix-copy-btn').addEventListener('click', function () {
+    var codeEl = document.getElementById('pix-code');
+    codeEl.select();
+    try {
+      navigator.clipboard.writeText(codeEl.value);
+      var btn = document.getElementById('pix-copy-btn');
+      var original = btn.textContent;
+      btn.textContent = 'Copiado!';
+      setTimeout(function () { btn.textContent = original; }, 1500);
+    } catch (e) {}
   });
 
   loadCart();
