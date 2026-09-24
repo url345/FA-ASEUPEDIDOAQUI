@@ -28,8 +28,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Credenciais da NovaPay não configuradas no servidor.' });
   }
 
-  // TODO: confirmar com a documentação da NovaPay se existem outros campos
-  // obrigatórios (ex: dados do cliente, callback_url para webhook, etc.)
   const payload = {
     amount,
     description,
@@ -53,14 +51,11 @@ export default async function handler(req, res) {
       return res.status(novapayResponse.status).json({ error: 'Erro ao criar cobrança na NovaPay', details: data });
     }
 
-    // TODO: ajustar os nomes dos campos abaixo assim que soubermos o formato
-    // exato da resposta da NovaPay (qual campo traz o código copia-e-cola e
-    // qual traz a imagem/URL do QR code).
     return res.status(200).json({
-      id: data.id,
-      pix_copy_paste: data.pix_copy_paste ?? data.qr_code ?? null,
-      qr_code_image: data.qr_code_image ?? data.qr_code_url ?? null,
-      status: data.status,
+      id: data.transaction ? data.transaction.id : null,
+      pix_copy_paste: data.copyPaste || null,
+      qr_code_image: data.qrCodeBase64 || data.qrcodeUrl || null,
+      status: data.transaction ? data.transaction.status : null,
       raw: data,
     });
   } catch (err) {
